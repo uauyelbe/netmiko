@@ -1,0 +1,37 @@
+# -------------------------------------------------------------------
+# Table
+# -------------------------------------------------------------------
+# retrieve the chassis hardware (inventory) and extract the Chassis
+# items.
+# -------------------------------------------------------------------
+
+---
+ChassisInventoryTable:
+    rpc: get-chassis-inventory
+    item: .//name[starts-with(.,'Chassis')]/parent::*
+    view: _chassis_inventory_view
+
+# -------------------------------------------------------------------
+# View
+# -------------------------------------------------------------------
+# use the underscore (_) so this definition is not
+# imported into the glboal namespace. We want to extract various
+# bits of information from the Chassis items
+# -------------------------------------------------------------------
+
+_chassis_inventory_view:
+    fields:
+        PEM: PemHwTable
+        
+PemHwTable:
+    item: .//name[starts-with(.,'PEM')]/parent::*
+    view: _pem_hw_view
+
+_pem_hw_view:
+    fields:
+        name: name
+        sn: serial-number
+        pn: part-number
+        ver: version
+        model: model-number
+        desc: description
